@@ -27,7 +27,7 @@ from datetime import datetime as dt
 from datetime import timedelta
 from logging import getLogger
 import os
-from tempfile import gettempdir as tmp
+from tempfile import mkdtemp
 try:
     import cPickle as pickle
 except Exception:
@@ -112,7 +112,12 @@ class FileCache(Cache):
         @type duration: {unit:value}
         """
         if location is None:
-            location = os.path.join(tmp(), 'suds')
+            if os.path.isdir(os.path.expanduser("~")):
+                default_cache = os.path.join(os.path.expanduser("~"), '.cache')
+                xdg_cache = os.environ.get('XDG_CACHE_HOME', default_cache)
+                location = os.path.join(xdg_cache, "suds")
+            else:
+                location = mkdtemp()
         self.location = location
         self.duration = (None, 0)
         self.setduration(**duration)

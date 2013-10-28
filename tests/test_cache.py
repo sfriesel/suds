@@ -140,7 +140,7 @@ def test_FileCache_clear(tmpdir):
 
 
 def test_FileCache_location(tmpdir):
-    defaultLocation = os.path.join(tempfile.gettempdir(), "suds")
+    defaultLocation = os.path.join(os.path.expanduser("~"), ".cache", "suds")
     cache = suds.cache.FileCache()
     assert os.path.isdir(cache.location)
     assert cache.location == defaultLocation
